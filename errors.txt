@@ -1,0 +1,2 @@
+1 - Erro de validação
+2 - Erro de autorização
