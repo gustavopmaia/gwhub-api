@@ -1,10 +1,11 @@
 import OpenAI from "openai";
+import { OPENAI_API_KEY } from '../constants';
 import { errorMessage } from "../utils/messages";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
 });
 
 export const OpenAiService = async (fala: string) => {
