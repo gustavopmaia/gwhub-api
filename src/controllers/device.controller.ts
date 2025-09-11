@@ -43,7 +43,7 @@ export const DeviceController = {
     }
   },
 
-  getAll: async (_req: FastifyRequest, res: FastifyReply) => {
+  getAll: async (req: FastifyRequest, res: FastifyReply) => {
     const token = req.headers["authorization"];
     
       if (
@@ -95,7 +95,7 @@ export const DeviceController = {
         return res.status(401).send(errorMessage("Authorization error", 2));
         z;
       }
-      
+
     const { id } = req.params;
     const { name, description, isActive } = req.body;
 
