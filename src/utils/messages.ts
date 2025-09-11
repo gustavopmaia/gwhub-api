@@ -9,7 +9,7 @@ export function successMessage(data?: any): SuccessMessage {
 export function errorMessage(
   message: string,
   statusCode: number = 500,
-  error?: string
+  error?: string,
 ): ErrorMessage {
   return {
     message,

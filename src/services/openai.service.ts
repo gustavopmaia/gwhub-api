@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { OPENAI_API_KEY } from '../constants';
+import { OPENAI_API_KEY } from "../constants";
 import { errorMessage } from "../utils/messages";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";

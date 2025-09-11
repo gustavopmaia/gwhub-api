@@ -5,7 +5,7 @@ import { OpenAiService } from "../services/openai.service";
 
 export const OpenAiController = async (
   req: FastifyRequest,
-  res: FastifyReply
+  res: FastifyReply,
 ) => {
   const token = req.headers["authorization"];
 

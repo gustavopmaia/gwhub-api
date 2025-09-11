@@ -1,7 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export class AppError extends Error {
-  constructor(public message: string, public statusCode: number) {
+  constructor(
+    public message: string,
+    public statusCode: number,
+  ) {
     super(message);
   }
 }
@@ -9,7 +12,7 @@ export class AppError extends Error {
 function errorHandler(
   error: AppError | Error,
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   const statusCode =
     "statusCode" in error ? (error as AppError).statusCode : 500;
