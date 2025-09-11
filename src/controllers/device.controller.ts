@@ -73,7 +73,7 @@ export const DeviceController = {
 
     try {
       const device = await prisma.device.findUnique({
-        where: { id: Number(id) },
+        where: { id: id },
       });
 
       if (!device) {
@@ -82,6 +82,7 @@ export const DeviceController = {
 
       res.status(200).send(device);
     } catch (e) {
+    console.log(e)
       res.status(400).send(errorMessage("Erro ao obter dispositivo", 3, "Erro"));
     }
   },
@@ -96,14 +97,14 @@ export const DeviceController = {
         z;
       }
 
-    const { id } = req.params;
+    const id = req.params.id;
     const { name, description, isActive } = req.body;
 
     try {
       const parsedBody = deviceSchema.parse(req.body);
 
       const device = await prisma.device.findUnique({
-        where: { id: Number(id) },
+        where: { id: id },
       });
 
       if (!device) {
@@ -111,7 +112,7 @@ export const DeviceController = {
       }
 
       const updatedDevice = await prisma.device.update({
-        where: { id: Number(id) },
+        where: { id: id },
         data: {
           name: parsedBody.name,
           description: parsedBody.description,
@@ -121,6 +122,7 @@ export const DeviceController = {
 
       res.status(200).send(successMessage("Dispositivo atualizado com sucesso!"));
     } catch (e) {
+    console.log(e)
       if (e instanceof z.ZodError) {
         return res.status(400).send(errorMessage("Erro de validação", 3, e.errors));
       }
