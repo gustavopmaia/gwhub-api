@@ -6,13 +6,22 @@ import { z } from 'zod';
 const prisma = new PrismaClient();
 
 const deviceSchema = z.object({
-  name: z.string().min(1, "O nome é obrigatório"),  // Nome do dispositivo
+  name: z.string().min(1, "O nome é obrigatório"),
   description: z.string().min(1, "A descrição é obrigatória"),
-  isActive: z.union([z.literal(1), z.literal(0)]).refine(val => val === 1 || val === 0, { message: "isActive deve ser 1 ou 0" }),  // Ativo ou inativo (1 ou 0)
+  isActive: z.union([z.literal(1), z.literal(0)]).refine(val => val === 1 || val === 0, { message: "isActive deve ser 1 ou 0" }),
 });
 
 export const DeviceController = {
   create: async (req: FastifyRequest, res: FastifyReply) => {
+    const token = req.headers["authorization"];
+    
+      if (
+        token !== "8673c8bfb68df6c834cb8f1ec5c2bb367418390b7e675c9d71d2f5281d6a1e4c"
+      ) {
+        return res.status(401).send(errorMessage("Authorization error", 2));
+        z;
+      }
+
     try {
       const parsedBody = deviceSchema.parse(req.body);
 
@@ -35,6 +44,14 @@ export const DeviceController = {
   },
 
   getAll: async (_req: FastifyRequest, res: FastifyReply) => {
+    const token = req.headers["authorization"];
+    
+      if (
+        token !== "8673c8bfb68df6c834cb8f1ec5c2bb367418390b7e675c9d71d2f5281d6a1e4c"
+      ) {
+        return res.status(401).send(errorMessage("Authorization error", 2));
+        z;
+      }
     try {
       const devices = await prisma.device.findMany();
       res.status(200).send(devices);
@@ -44,6 +61,14 @@ export const DeviceController = {
   },
 
   getOne: async (req: FastifyRequest, res: FastifyReply) => {
+    const token = req.headers["authorization"];
+    
+      if (
+        token !== "8673c8bfb68df6c834cb8f1ec5c2bb367418390b7e675c9d71d2f5281d6a1e4c"
+      ) {
+        return res.status(401).send(errorMessage("Authorization error", 2));
+        z;
+      }
     const { id } = req.params;
 
     try {
@@ -62,6 +87,15 @@ export const DeviceController = {
   },
 
   update: async (req: FastifyRequest, res: FastifyReply) => {
+    const token = req.headers["authorization"];
+    
+      if (
+        token !== "8673c8bfb68df6c834cb8f1ec5c2bb367418390b7e675c9d71d2f5281d6a1e4c"
+      ) {
+        return res.status(401).send(errorMessage("Authorization error", 2));
+        z;
+      }
+      
     const { id } = req.params;
     const { name, description, isActive } = req.body;
 
