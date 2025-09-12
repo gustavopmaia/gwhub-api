@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { DeviceController } from "./controllers/device.controller";
+import { OpenAiController } from "./controllers/openai.controller";
 
 export const routes = async (app: FastifyInstance) => {
   app.post("/api/device", DeviceController.create);
@@ -9,6 +10,8 @@ export const routes = async (app: FastifyInstance) => {
   app.get("/api/device/:id", DeviceController.getOne);
 
   app.put("/api/device/:id", DeviceController.update);
+
+  app.post("/api/alexa", OpenAiController);
 
   app.get("/api/healthcheck", (req, res) => res.send({ status: "Healthy v2" }));
 };
