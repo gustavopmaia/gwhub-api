@@ -1,9 +1,10 @@
 import OpenAI from "openai";
+import { OPENAI_API_KEY } from "../constants";
  
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
  
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
 });
 
 let userData = {
@@ -78,6 +79,6 @@ sobre o que o usuário pode fazer. Lembre-se: você tem acesso ao inversor e pod
     return response.choices[0]?.message?.content || "Sem resposta";
   } catch (error: any) {
     console.error(error);
-    return "Erro ao processar a requisição.";
+    throw new Error("Erro ao processar a requisição.");
   }
 };

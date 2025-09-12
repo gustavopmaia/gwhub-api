@@ -1,8 +1,10 @@
 import fastify from "fastify";
 import { routes } from "./routes";
+import dotenv from "dotenv";
 
 const app = fastify({});
 const PORT = 3000;
+dotenv.config();
 
 app.register(routes);
 
