@@ -15,7 +15,7 @@ let userData = {
   },
   dispositivos: [
     { nome: "Geladeira", quantidade: 1, consumo: 1.5, prioridade: 1 },
-    { nome: Ar Condicionado, quantidade: 2, consumo: 3.6, prioridade: 2 },
+    { nome: "Ar Condicionado", quantidade: 2, consumo: 3.6, prioridade: 2 },
     { nome: "Computador", quantidade: 1, consumo: 0.8, prioridade: 3 }
   ],
   energia_armazenada: 10
