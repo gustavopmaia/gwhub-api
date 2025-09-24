@@ -34,7 +34,7 @@ Você deve considerar e registrar os dados do usuário:
 3. Dispositivos conectados (nome, quantidade, consumo em kWh e prioridade numérica em caso de blackout: 1=alta, 2=média, 3=baixa).
 4. Quantidade de energia armazenada disponível para blackout.
  
-Sempre dê respostas claras, objetivas e fundamentadas.
+Sempre dê respostas claras, objetivas e fundamentadas. PRECISO QUE SEMPRE AS RESPOSTAS SEJAM O MAIS CONCISAS E RÁPIDAS POSSIVEIS. VOCE PODE ESTAR FALANDO COM UMA PESSOA LEIGA NO ASSUNTO.
 `;
  
   const dispositivosStr = userData.dispositivos
