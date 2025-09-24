@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../constants";
- 
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
- 
+
 const client = new OpenAI({
   apiKey: OPENAI_API_KEY,
 });
@@ -21,35 +21,41 @@ let userData = {
   ],
   energia_armazenada: 10
 }
- 
+
 export const OpenAiService = async (fala: string) => {
   const intrucoes = `
 Você é um analista técnico especializado na GoodWe, uma empresa líder no setor de inversores solares.
 Seu papel é fornecer informações detalhadas e precisas sobre inversores solares, seus tipos, funcionalidades, benefícios
 e como escolher o modelo ideal para diferentes necessidades.
- 
+
 Você deve considerar e registrar os dados do usuário:
 1. Nome e idade.
 2. Horário de pico de consumo (intervalo datetime).
 3. Dispositivos conectados (nome, quantidade, consumo em kWh e prioridade numérica em caso de blackout: 1=alta, 2=média, 3=baixa).
 4. Quantidade de energia armazenada disponível para blackout.
- 
-Sempre dê respostas claras, objetivas e fundamentadas. PRECISO QUE SEMPRE AS RESPOSTAS SEJAM O MAIS CONCISAS E RÁPIDAS POSSIVEIS. VOCE PODE ESTAR FALANDO COM UMA PESSOA LEIGA NO ASSUNTO.
+
+Sempre forneça respostas curtas, diretas e de fácil compreensão, como se fosse para um leigo.
+Se a pergunta envolver sugestões, limite-se a 3 alternativas concisas, considerando os dispositivos do usuário.
+
+Lembre-se de que a resposta será ouvida e não lida, então evite formatação (como negritos) e mantenha a clareza.
+
+Use sempre as informações dos dispositivos fornecidas para basear suas respostas.
+
 `;
- 
+
   const dispositivosStr = userData.dispositivos
     ? userData.dispositivos
         .map(
           (d: any) =>
-            `- ${d.nome} | qtd: ${d.quantidade} | consumo: ${d.consumo} kWh | prioridade: ${d.prioridade}`
+            `- ${d.nome}: ${d.quantidade} unidade(s), consumo: ${d.consumo} kWh, prioridade: ${d.prioridade}`
         )
         .join("\n")
     : "Nenhum dispositivo informado";
- 
+
   const horarioPico = userData.horario_pico
     ? `De ${userData.horario_pico.inicio} até ${userData.horario_pico.fim}`
     : "Não informado";
- 
+
   const userInfo = `
 Dados do usuário:
 - Nome: ${userData.nome || "Não informado"}
@@ -59,13 +65,11 @@ Dados do usuário:
 ${dispositivosStr}
 - Energia armazenada: ${userData.energia_armazenada || "Não informado"} kWh
 `;
- 
+
   const instrucao2 = `
-Você pode desligar equipamentos, diminuir energia enviada para eles, então, caso for elaborar alguma sugestão para o usário, responda com no máximo 3 alternativas curtas.
-Se não houver necessidade de sugestões, responda normalmente sem o uso de 3  alternativas
-sobre o que o usuário pode fazer. Lembre-se: você tem acesso ao inversor e pode controlar para onde manda energia.
+Você pode desligar equipamentos ou reduzir o consumo deles para gerenciar o uso de energia. Ao fornecer sugestões para o usuário, limite-se a 3 alternativas rápidas e simples.
 `;
- 
+
   try {
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -75,8 +79,10 @@ sobre o que o usuário pode fazer. Lembre-se: você tem acesso ao inversor e pod
         { role: "user", content: `${userInfo}\n\nPergunta: ${fala}` },
       ],
     });
- 
-    return response.choices[0]?.message?.content || "Sem resposta";
+
+    const resposta = response.choices[0]?.message?.content || "Sem resposta";
+   
+    return resposta.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\n/g, ' ').trim();
   } catch (error: any) {
     console.error(error);
     throw new Error("Erro ao processar a requisição.");
