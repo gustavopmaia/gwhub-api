@@ -8,18 +8,176 @@ const client = new OpenAI({
 });
 
 let userData = {
-  nome: "Pedro",
-  idade: 20,
+  usuario: {
+    nome: "Pedro",
+    localizacao: "Casa",
+    id_usuario: "123456",
+    prioridade_maxima: 3
+  },
   horario_pico: {
-    "inicio": "2025-09-10T18:00:00",
-    "fim": "2025-09-10T22:00:00"
+    inicio: "2025-09-10T18:00:00",
+    fim: "2025-09-10T22:00:00",
+    duracao_em_horas: 4
   },
   dispositivos: [
-    { nome: "Geladeira", quantidade: 1, consumo: 1.5, prioridade: 1 },
-    { nome: "Ar Condicionado", quantidade: 2, consumo: 3.6, prioridade: 2 },
-    { nome: "Computador", quantidade: 1, consumo: 0.8, prioridade: 3 }
+    {
+      nome: "Geladeira",
+      quantidade: 1,
+      consumo: 1.5,
+      consumo_por_unidade: 1.5,
+      prioridade: 1,
+      tipo: "Refrigeração",
+      status_atual: "Ligado",
+      energia_consumida_total: 1.5,
+      horas_uso_diarias: 24
+    },
+    {
+      nome: "Ar Condicionado",
+      quantidade: 2,
+      consumo: 3.6,
+      consumo_por_unidade: 1.8,
+      prioridade: 2,
+      tipo: "Climatização",
+      status_atual: "Desligado",
+      energia_consumida_total: 7.2,
+      horas_uso_diarias: 6
+    },
+    {
+      nome: "Computador",
+      quantidade: 1,
+      consumo: 0.8,
+      consumo_por_unidade: 0.8,
+      prioridade: 3,
+      tipo: "Tecnologia",
+      status_atual: "Ligado",
+      energia_consumida_total: 0.8,
+      horas_uso_diarias: 8
+    },
+    {
+      nome: "Lâmpadas",
+      quantidade: 10,
+      consumo: 0.5,
+      consumo_por_unidade: 0.05,
+      prioridade: 2,
+      tipo: "Iluminação",
+      status_atual: "Ligado",
+      energia_consumida_total: 5,
+      horas_uso_diarias: 10
+    },
+    {
+      nome: "Micro-ondas",
+      quantidade: 1,
+      consumo: 1.2,
+      consumo_por_unidade: 1.2,
+      prioridade: 2,
+      tipo: "Cozinha",
+      status_atual: "Desligado",
+      energia_consumida_total: 1.2,
+      horas_uso_diarias: 0.5
+    },
+    {
+      nome: "Máquina de Lavar Roupas",
+      quantidade: 1,
+      consumo: 2,
+      consumo_por_unidade: 2,
+      prioridade: 3,
+      tipo: "Cozinha",
+      status_atual: "Desligado",
+      energia_consumida_total: 2,
+      horas_uso_diarias: 1
+    },
+    {
+      nome: "Aquecedor",
+      quantidade: 1,
+      consumo: 2.5,
+      consumo_por_unidade: 2.5,
+      prioridade: 1,
+      tipo: "Aquecimento",
+      status_atual: "Desligado",
+      energia_consumida_total: 2.5,
+      horas_uso_diarias: 3
+    },
+    {
+      nome: "TV",
+      quantidade: 1,
+      consumo: 1.0,
+      consumo_por_unidade: 1.0,
+      prioridade: 3,
+      tipo: "Entretenimento",
+      status_atual: "Ligado",
+      energia_consumida_total: 1.0,
+      horas_uso_diarias: 4
+    },
+    {
+      nome: "Forno Elétrico",
+      quantidade: 1,
+      consumo: 2.8,
+      consumo_por_unidade: 2.8,
+      prioridade: 2,
+      tipo: "Cozinha",
+      status_atual: "Desligado",
+      energia_consumida_total: 2.8,
+      horas_uso_diarias: 1
+    }
   ],
-  energia_armazenada: 10
+  energia_armazenada: {
+    total: 10,
+    unidade: "kWh",
+    disponibilidade: 50,
+    percentual_utilizado: 0,
+    tempo_estimado_para_descarregamento: "12h"
+  },
+  energia_bateria: {
+    capacidade_maxima: 15,
+    capacidade_atual: 10,
+    estado: "Carregando",
+    nivel_bateria: 67,
+    tempo_estimado_para_carregamento: "6h",
+    tipo_bateria: "Li-ion"
+  },
+  projeções: {
+    energia_necessaria_para_pico: 18,
+    energia_restante_apos_pico: 8,
+    energia_maxima_armazenada: 15,
+    energia_diaria_estimativa: 25,
+    consumo_maximo_horario: 7.0
+  },
+  historico_consumo: {
+    mes_atual: {
+      total_consumido: 250,
+      dispositivos_com_mais_consumo: ["Ar Condicionado", "Geladeira"],
+      percentual_de_uso_no_pico: 45,
+      periodos_de_uso_pico: [
+        {
+          inicio: "2025-09-10T18:00:00",
+          fim: "2025-09-10T22:00:00",
+          consumo_estimado: 20
+        }
+      ]
+    },
+    mes_anterior: {
+      total_consumido: 240,
+      dispositivos_com_mais_consumo: ["Ar Condicionado", "Micro-ondas"],
+      percentual_de_uso_no_pico: 40,
+      periodos_de_uso_pico: [
+        {
+          inicio: "2025-08-15T19:00:00",
+          fim: "2025-08-15T22:00:00",
+          consumo_estimado: 18
+        }
+      ]
+    }
+  },
+  recomendacoes: {
+    optimizacao_energia: [
+      "Reduzir o uso de Ar Condicionado e Forno Elétrico durante o horário de pico",
+      "Utilizar mais energia da bateria para evitar sobrecarga na rede elétrica"
+    ],
+    alertas: [
+      "O consumo de energia pode ultrapassar a capacidade da bateria se o consumo durante o pico continuar elevado.",
+      "A Máquina de Lavar Roupas e o Forno Elétrico podem ser programados para fora do horário de pico para otimizar o consumo."
+    ]
+  }
 }
 
 export const OpenAiService = async (fala: string) => {
@@ -39,7 +197,7 @@ Se a pergunta envolver sugestões, limite-se a 3 alternativas concisas, consider
 
 Lembre-se de que a resposta será ouvida e não lida, então evite formatação (como negritos) e mantenha a clareza.
 
-Use sempre as informações dos dispositivos fornecidas para basear suas respostas.
+Use sempre as informações dos dispositivos fornecidas para basear suas respostas. Não utilize em hipótese alguma nenhuma informação sobre algum dispositivo que não foi dado como contexto
 
 `;
 
