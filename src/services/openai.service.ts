@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY } from "../constants";
+import { getCoordinatesFromCEP } from "./cep.service";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -12,12 +13,13 @@ let userData = {
     nome: "Pedro",
     localizacao: "Casa",
     id_usuario: "123456",
-    prioridade_maxima: 3
+    prioridade_maxima: 3,
+    cep: "02420040"
   },
   horario_pico: {
     inicio: "2025-09-10T18:00:00",
     fim: "2025-09-10T22:00:00",
-    duracao_em_horas: 4
+    duracao_em_horas: 4,
   },
   dispositivos: [
     {
@@ -179,6 +181,10 @@ let userData = {
     ]
   }
 }
+
+const latLon = getCoordinatesFromCEP(userData.usuario.cep);
+
+const weather = getWeather(latLon.latitude, latLon.longitude);
 
 export const OpenAiService = async (fala: string) => {
   const intrucoes = `
