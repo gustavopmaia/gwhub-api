@@ -11,36 +11,36 @@ const PORT = 3000
 dotenv.config()
 
 app.register(routes)
-app.register(fastifyCron, {
-  jobs: [
-    {
-      cronTime: '0 * * * *',
-      onTick: async () => {
-        const latLon: any = await getCoordinatesFromCEP(userData.usuario.cep)
+// app.register(fastifyCron, {
+//   jobs: [
+//     {
+//       cronTime: '0 * * * *',
+//       onTick: async () => {
+//         const latLon: any = await getCoordinatesFromCEP(userData.usuario.cep)
 
-        console.log(latLon)
+//         console.log(latLon)
 
-        const weather = await getWeather(latLon.lat, latLon.lon)
+//         const weather = await getWeather(latLon.lat, latLon.lon)
 
-        console.log(weather)
+//         console.log(weather)
 
-        if (weather.wind_kph > 70) {
-          console.log('Cuidado com o vento ai fera') // Preparação para notificações firebase
-        }
+//         if (weather.wind_kph > 70) {
+//           console.log('Cuidado com o vento') // Preparação para notificações firebase
+//         }
 
-        if (weather.precip_mm > 60) {
-          console.log('Cuidado com a chuva ai fera')
-        }
+//         if (weather.precip_mm > 60) {
+//           console.log('Cuidado com a chuva')
+//         }
 
-        if (weather.cloud > 80) {
-          console.log('Voce vai produzir menos energia fera')
-        }
-      },
-    },
-  ],
-})
+//         if (weather.cloud > 80) {
+//           console.log('Voce vai produzir menos energia')
+//         }
+//       },
+//     },
+//   ],
+// })
 
 app.listen({ port: PORT, host: '0.0.0.0' }, () => {
-  app.cron.startAllJobs()
+  // app.cron.startAllJobs()
   console.log(`Servidor rodando na porta: ${PORT}`)
 })
