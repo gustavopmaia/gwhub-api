@@ -12,14 +12,6 @@
 
 ---
 
-## Objetivos da Sprint 3
-
-* **Avançar na implementação técnica** da solução, com integração entre os componentes.
-* **Demonstrar um sistema funcional** (simulado e/ou físico) evidenciando a atuação conjunta de painéis solares, inversor, baterias, sensores, automação e assistente virtual.
-* **Apresentar dados reais ou simulados** de energia, comandos e visualização.
-
----
-
 ## Arquitetura do Backend
 
 O backend foi desenvolvido em **Node.js + TypeScript** com **Fastify**, integrando APIs externas e oferecendo endpoints para automação, IA e dados de consumo.
