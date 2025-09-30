@@ -1,8 +1,13 @@
 import { FastifyInstance } from "fastify";
 import { DeviceController } from "./controllers/device.controller";
 import { OpenAiController } from "./controllers/openai.controller";
+import { NotificationController } from "./controllers/notification.controller";
 
 export const routes = async (app: FastifyInstance) => {
+  app.post("/api/notification", NotificationController.addUser);
+
+  app.post("/api/notification/send", NotificationController.sendNotification);
+
   app.post("/api/device", DeviceController.create);
 
   app.get("/api/device", DeviceController.getAll);

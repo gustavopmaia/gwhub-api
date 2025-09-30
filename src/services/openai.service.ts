@@ -15,7 +15,7 @@ export let userData = {
     localizacao: "Casa",
     id_usuario: "123456",
     prioridade_maxima: 3,
-    cep: "02420040"
+    cep: "02420040",
   },
   horario_pico: {
     inicio: "2025-09-10T18:00:00",
@@ -32,7 +32,7 @@ export let userData = {
       tipo: "Refrigeração",
       status_atual: "Ligado",
       energia_consumida_total: 1.5,
-      horas_uso_diarias: 24
+      horas_uso_diarias: 24,
     },
     {
       nome: "Ar Condicionado",
@@ -43,7 +43,7 @@ export let userData = {
       tipo: "Climatização",
       status_atual: "Desligado",
       energia_consumida_total: 7.2,
-      horas_uso_diarias: 6
+      horas_uso_diarias: 6,
     },
     {
       nome: "Computador",
@@ -54,7 +54,7 @@ export let userData = {
       tipo: "Tecnologia",
       status_atual: "Ligado",
       energia_consumida_total: 0.8,
-      horas_uso_diarias: 8
+      horas_uso_diarias: 8,
     },
     {
       nome: "Lâmpadas",
@@ -65,7 +65,7 @@ export let userData = {
       tipo: "Iluminação",
       status_atual: "Ligado",
       energia_consumida_total: 5,
-      horas_uso_diarias: 10
+      horas_uso_diarias: 10,
     },
     {
       nome: "Micro-ondas",
@@ -76,7 +76,7 @@ export let userData = {
       tipo: "Cozinha",
       status_atual: "Desligado",
       energia_consumida_total: 1.2,
-      horas_uso_diarias: 0.5
+      horas_uso_diarias: 0.5,
     },
     {
       nome: "Máquina de Lavar Roupas",
@@ -87,7 +87,7 @@ export let userData = {
       tipo: "Cozinha",
       status_atual: "Desligado",
       energia_consumida_total: 2,
-      horas_uso_diarias: 1
+      horas_uso_diarias: 1,
     },
     {
       nome: "Aquecedor",
@@ -98,7 +98,7 @@ export let userData = {
       tipo: "Aquecimento",
       status_atual: "Desligado",
       energia_consumida_total: 2.5,
-      horas_uso_diarias: 3
+      horas_uso_diarias: 3,
     },
     {
       nome: "TV",
@@ -109,7 +109,7 @@ export let userData = {
       tipo: "Entretenimento",
       status_atual: "Ligado",
       energia_consumida_total: 1.0,
-      horas_uso_diarias: 4
+      horas_uso_diarias: 4,
     },
     {
       nome: "Forno Elétrico",
@@ -120,15 +120,15 @@ export let userData = {
       tipo: "Cozinha",
       status_atual: "Desligado",
       energia_consumida_total: 2.8,
-      horas_uso_diarias: 1
-    }
+      horas_uso_diarias: 1,
+    },
   ],
   energia_armazenada: {
     total: 10,
     unidade: "kWh",
     disponibilidade: 50,
     percentual_utilizado: 0,
-    tempo_estimado_para_descarregamento: "12h"
+    tempo_estimado_para_descarregamento: "12h",
   },
   energia_bateria: {
     capacidade_maxima: 15,
@@ -136,14 +136,14 @@ export let userData = {
     estado: "Carregando",
     nivel_bateria: 67,
     tempo_estimado_para_carregamento: "6h",
-    tipo_bateria: "Li-ion"
+    tipo_bateria: "Li-ion",
   },
   projeções: {
     energia_necessaria_para_pico: 18,
     energia_restante_apos_pico: 8,
     energia_maxima_armazenada: 15,
     energia_diaria_estimativa: 25,
-    consumo_maximo_horario: 7.0
+    consumo_maximo_horario: 7.0,
   },
   historico_consumo: {
     mes_atual: {
@@ -154,9 +154,9 @@ export let userData = {
         {
           inicio: "2025-09-10T18:00:00",
           fim: "2025-09-10T22:00:00",
-          consumo_estimado: 20
-        }
-      ]
+          consumo_estimado: 20,
+        },
+      ],
     },
     mes_anterior: {
       total_consumido: 240,
@@ -166,22 +166,22 @@ export let userData = {
         {
           inicio: "2025-08-15T19:00:00",
           fim: "2025-08-15T22:00:00",
-          consumo_estimado: 18
-        }
-      ]
-    }
+          consumo_estimado: 18,
+        },
+      ],
+    },
   },
   recomendacoes: {
     optimizacao_energia: [
       "Reduzir o uso de Ar Condicionado e Forno Elétrico durante o horário de pico",
-      "Utilizar mais energia da bateria para evitar sobrecarga na rede elétrica"
+      "Utilizar mais energia da bateria para evitar sobrecarga na rede elétrica",
     ],
     alertas: [
       "O consumo de energia pode ultrapassar a capacidade da bateria se o consumo durante o pico continuar elevado.",
-      "A Máquina de Lavar Roupas e o Forno Elétrico podem ser programados para fora do horário de pico para otimizar o consumo."
-    ]
-  }
-}
+      "A Máquina de Lavar Roupas e o Forno Elétrico podem ser programados para fora do horário de pico para otimizar o consumo.",
+    ],
+  },
+};
 
 export const OpenAiService = async (fala: string) => {
   const intrucoes = `
@@ -242,8 +242,11 @@ Você pode desligar equipamentos ou reduzir o consumo deles para gerenciar o uso
     });
 
     const resposta = response.choices[0]?.message?.content || "Sem resposta";
-   
-    return resposta.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\n/g, ' ').trim();
+
+    return resposta
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/\n/g, " ")
+      .trim();
   } catch (error: any) {
     console.error(error);
     throw new Error("Erro ao processar a requisição.");
