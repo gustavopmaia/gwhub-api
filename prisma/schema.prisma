@@ -15,5 +15,5 @@ model Device {
   name        String
   description String
   isActive    Boolean
-  pin         Int
+  pin         Int     @default(6)
 }
