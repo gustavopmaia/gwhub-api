@@ -13,6 +13,7 @@ exports.DeviceService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const zod_1 = require("zod");
+const mqtt_service_1 = require("../services/mqtt.service");
 const deviceSchema = zod_1.z.object({
     name: zod_1.z.string().min(1, 'O nome é obrigatório'),
     description: zod_1.z.string().min(1, 'A descrição é obrigatória'),
@@ -22,16 +23,23 @@ const deviceSchema = zod_1.z.object({
 });
 let DeviceService = class DeviceService {
     prisma;
-    constructor(prisma) {
+    mqtt;
+    constructor(prisma, mqtt) {
         this.prisma = prisma;
+        this.mqtt = mqtt;
     }
     async create(body) {
         try {
             const parsed = deviceSchema.parse(body);
+            const pin = typeof body?.pin === 'number' ? body.pin : undefined;
+            if (pin === undefined) {
+                return { ok: false, type: 'validation', detail: JSON.stringify([{ path: ['pin'], message: 'pin é obrigatório' }]) };
+            }
             await this.prisma.device.create({
                 data: {
                     name: parsed.name,
                     description: parsed.description,
+                    pin,
                     isActive: parsed.isActive === 1,
                 },
             });
@@ -56,14 +64,20 @@ let DeviceService = class DeviceService {
             const exists = await this.prisma.device.findUnique({ where: { id } });
             if (!exists)
                 return { ok: false, type: 'not_found' };
+            const newIsActive = parsed.isActive === 1 ? true : parsed.isActive === 0 ? false : false;
             await this.prisma.device.update({
                 where: { id },
                 data: {
                     name: parsed.name,
                     description: parsed.description,
-                    isActive: parsed.isActive === 1 ? true : parsed.isActive === 0 ? false : false,
+                    isActive: newIsActive,
                 },
             });
+            if (exists.isActive !== newIsActive) {
+                const pin = exists.pin;
+                const message = `LED${pin}:${newIsActive ? 'ON' : 'OFF'}`;
+                await this.mqtt.publishMessage(message);
+            }
             return { ok: true };
         }
         catch (e) {
@@ -77,5 +91,5 @@ let DeviceService = class DeviceService {
 exports.DeviceService = DeviceService;
 exports.DeviceService = DeviceService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, mqtt_service_1.MqttService])
 ], DeviceService);

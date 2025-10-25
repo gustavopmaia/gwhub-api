@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const device_controller_1 = require("./device.controller");
 const device_service_1 = require("./device.service");
 const prisma_service_1 = require("../prisma/prisma.service");
+const mqtt_service_1 = require("../services/mqtt.service");
 let DeviceModule = class DeviceModule {
 };
 exports.DeviceModule = DeviceModule;
 exports.DeviceModule = DeviceModule = __decorate([
     (0, common_1.Module)({
         controllers: [device_controller_1.DeviceController],
-        providers: [device_service_1.DeviceService, prisma_service_1.PrismaService],
+        providers: [device_service_1.DeviceService, prisma_service_1.PrismaService, mqtt_service_1.MqttService],
     })
 ], DeviceModule);

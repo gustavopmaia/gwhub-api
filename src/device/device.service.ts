@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { z } from 'zod'
+import { MqttService } from '../services/mqtt.service'
 
 const deviceSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -12,15 +13,20 @@ const deviceSchema = z.object({
 
 @Injectable()
 export class DeviceService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {}
 
   async create(body: any): Promise<{ ok: true } | { ok: false; type: 'validation' | 'error'; detail?: string }> {
     try {
       const parsed = deviceSchema.parse(body)
+      const pin = typeof body?.pin === 'number' ? body.pin : undefined
+      if (pin === undefined) {
+        return { ok: false, type: 'validation', detail: JSON.stringify([{ path: ['pin'], message: 'pin é obrigatório' }]) }
+      }
       await this.prisma.device.create({
         data: {
           name: parsed.name,
           description: parsed.description,
+          pin,
           isActive: parsed.isActive === 1,
         },
       })
@@ -49,14 +55,21 @@ export class DeviceService {
       const parsed = deviceSchema.parse(body)
       const exists = await this.prisma.device.findUnique({ where: { id } })
       if (!exists) return { ok: false, type: 'not_found' }
+      const newIsActive = parsed.isActive === 1 ? true : parsed.isActive === 0 ? false : false
       await this.prisma.device.update({
         where: { id },
         data: {
           name: parsed.name,
           description: parsed.description,
-          isActive: parsed.isActive === 1 ? true : parsed.isActive === 0 ? false : false,
+          isActive: newIsActive,
         },
       })
+
+      if (exists.isActive !== newIsActive) {
+        const pin = exists.pin
+        const message = `LED${pin}:${newIsActive ? 'ON' : 'OFF'}`
+        await this.mqtt.publishMessage(message)
+      }
       return { ok: true }
     } catch (e: any) {
       if (e instanceof z.ZodError) {
@@ -66,4 +79,3 @@ export class DeviceService {
     }
   }
 }
-

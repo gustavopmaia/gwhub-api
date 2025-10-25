@@ -16,7 +16,6 @@ let ApiTokenGuard = class ApiTokenGuard {
         const expected = process.env.API_AUTH_TOKEN || DEFAULT_TOKEN;
         const ok = token === expected;
         if (!ok) {
-            // Preserve original error shape (401 + errorMessage)
             throw new common_1.HttpException({ message: 'Authorization error', statusCode: 2, error: undefined }, 401);
         }
         return true;

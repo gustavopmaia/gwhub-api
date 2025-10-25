@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Device {
-  id String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
   description String
-  isActive Boolean
+  isActive    Boolean
+  pin         Int
 }
