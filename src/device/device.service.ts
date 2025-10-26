@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { z } from 'zod'
-  import { MqttService } from '../services/mqtt.service'
+import { MqttService } from '../services/mqtt.service'
 
 const deviceCreateSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatório'),
@@ -30,14 +30,23 @@ const deviceSchema = z.object({
 
 @Injectable()
 export class DeviceService {
-  constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mqtt: MqttService
+  ) {}
 
-  async create(body: any): Promise<{ ok: true } | { ok: false; type: 'validation' | 'error'; detail?: string }> {
+  async create(
+    body: any
+  ): Promise<{ ok: true } | { ok: false; type: 'validation' | 'error'; detail?: string }> {
     try {
       const parsed = deviceCreateSchema.parse(body)
       const pin = typeof body?.pin === 'number' ? body.pin : undefined
       if (pin === undefined) {
-        return { ok: false, type: 'validation', detail: JSON.stringify([{ path: ['pin'], message: 'pin é obrigatório' }]) }
+        return {
+          ok: false,
+          type: 'validation',
+          detail: JSON.stringify([{ path: ['pin'], message: 'pin é obrigatório' }]),
+        }
       }
       await this.prisma.device.create({
         data: {
@@ -62,6 +71,32 @@ export class DeviceService {
 
   async getOne(id: string) {
     return this.prisma.device.findUnique({ where: { id } })
+  }
+
+  async updateAllOn() {
+    await this.prisma.device.updateMany({
+      data: {
+        isActive: true,
+      },
+    })
+
+    for (let i = 1; i <= 6; i++) {
+      const message = `LED${i}:ON`
+      await this.mqtt.publishMessage(message)
+    }
+  }
+
+  async updateAllOff() {
+    await this.prisma.device.updateMany({
+      data: {
+        isActive: false,
+      },
+    })
+
+    for (let i = 1; i <= 6; i++) {
+      const message = `LED${i}:OFF`
+      await this.mqtt.publishMessage(message)
+    }
   }
 
   async update(
