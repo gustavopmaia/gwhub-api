@@ -184,8 +184,3 @@ src/
 ├─ common/guards/        # ApiTokenGuard
 └─ utils/                # helpers de mensagens
 ```
-
-## Desenvolvimento adicional
-- Rode `npm run format` antes de subir alterações
-- Ajuste o `userData` inicial em `src/services/openai.service.ts` para refletir dados reais
-- Para deploy no Fly.io, utilize o `fly.toml` já disponível
